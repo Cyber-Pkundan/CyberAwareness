@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberGuard - Cybersecurity Awareness & Quiz Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            dark: '#0b132b',
+                            card: '#1c2541',
+                            accent: '#48cae4',
+                            neon: '#00f5d4'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b132b;
+            color: #e2e8f0;
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #00f5d4;
+            color: #00f5d4;
+            background-color: rgba(0, 245, 212, 0.08);
+        }
+        .glass-card {
+            background: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0b132b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1c2541;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-cyber-neon selection:text-cyber-dark">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-xl shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-shield-halved text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">
+                        CyberGuard
+                    </h1>
+                    <p class="text-xs text-slate-400 tracking-wide" id="sub-heading">Awareness & Security Knowledge Portal</p>
+                </div>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="flex items-center space-x-2 bg-slate-900/80 p-1.5 rounded-xl border border-slate-700/60">
+                <i class="fa-solid fa-globe text-cyan-400 ml-2"></i>
+                <label for="langSelect" class="sr-only">Select Language</label>
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-transparent text-sm font-medium text-slate-200 focus:outline-none focus:ring-0 cursor-pointer pr-2">
+                    <option value="en" class="bg-slate-900 text-slate-200">English</option>
+                    <option value="mr" class="bg-slate-900 text-slate-200">मराठी (Marathi)</option>
+                    <option value="hi" class="bg-slate-900 text-slate-200">हिंदी (Hindi)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 mt-2 overflow-x-auto custom-scrollbar">
+            <div class="flex space-x-1 sm:space-x-2 border-b border-slate-800 text-sm font-semibold whitespace-nowrap min-w-max pb-1">
+                <button onclick="switchTab('scams')" id="tab-scams" class="tab-btn active px-4 py-3 rounded-t-lg transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-user-ninja"></i> <span data-i18n="tab_scams">Cyber Scams</span>
+                </button>
+                <button onclick="switchTab('viruses')" id="tab-viruses" class="tab-btn px-4 py-3 rounded-t-lg transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-bug"></i> <span data-i18n="tab_viruses">Viruses & Malware</span>
+                </button>
+                <button onclick="switchTab('ransomware')" id="tab-ransomware" class="tab-btn px-4 py-3 rounded-t-lg transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-lock text-rose-400"></i> <span data-i18n="tab_ransomware">Ransomware</span>
+                </button>
+                <button onclick="switchTab('phishing')" id="tab-phishing" class="tab-btn px-4 py-3 rounded-t-lg transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-fish-fins"></i> <span data-i18n="tab_phishing">Spam & Phishing</span>
+                </button>
+                <button onclick="switchTab('bestpractices')" id="tab-bestpractices" class="tab-btn px-4 py-3 rounded-t-lg transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-user-shield"></i> <span data-i18n="tab_bestpractices">Best Practices</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-4 py-3 rounded-t-lg transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-graduation-cap text-amber-400"></i> <span data-i18n="tab_quiz">Knowledge Quiz</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <!-- SECTION 1: CYBER SCAMS -->
+        <section id="content-scams" class="tab-content block space-y-6 animate-fadeIn">
+            <div class="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 border border-blue-500/30 rounded-2xl p-6 mb-8">
+                <h2 class="text-2xl font-bold text-cyan-300 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-mask"></i> <span data-i18n="scams_title">Understanding Cyber Scams</span>
+                </h2>
+                <p class="text-slate-300 leading-relaxed" data-i18n="scams_desc">
+                    Cyber scams trick individuals into voluntary financial transfers or handing over confidential information through deception, urgency, and manipulation.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="scams-grid">
+                <!-- Dynamically Populated or Static Translatable Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: VIRUSES & MALWARE -->
+        <section id="content-viruses" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-r from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-2xl p-6 mb-8">
+                <h2 class="text-2xl font-bold text-purple-300 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-biohazard"></i> <span data-i18n="viruses_title">Viruses & Malware Spectrum</span>
+                </h2>
+                <p class="text-slate-300 leading-relaxed" data-i18n="viruses_desc">
+                    Malware (Malicious Software) includes any software intentionally designed to cause damage to a computer, server, client, or computer network.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="viruses-grid">
+                <!-- Malware Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: RANSOMWARE DEEP-DIVE -->
+        <section id="content-ransomware" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-r from-rose-900/40 to-red-950/40 border border-rose-500/30 rounded-2xl p-6 mb-8">
+                <h2 class="text-2xl font-bold text-rose-300 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-skull-crossbones"></i> <span data-i18n="ransomware_title">Ransomware Deep-Dive</span>
+                </h2>
+                <p class="text-slate-300 leading-relaxed" data-i18n="ransomware_desc">
+                    Ransomware is a severe malware form that encrypts a victim's files, demanding payment (often cryptocurrency) to regain access.
+                </p>
+            </div>
+
+            <div class="space-y-6" id="ransomware-details">
+                <!-- Ransomware dynamic breakdown -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: SPAM & PHISHING TIPS -->
+        <section id="content-phishing" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-r from-amber-900/40 to-orange-900/40 border border-amber-500/30 rounded-2xl p-6 mb-8">
+                <h2 class="text-2xl font-bold text-amber-300 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-envelope-open-text"></i> <span data-i18n="phishing_title">Identifying Spam & Phishing</span>
+                </h2>
+                <p class="text-slate-300 leading-relaxed" data-i18n="phishing_desc">
+                    Phishing attacks rely on tricking victims into clicking unsafe links or revealing passwords via fake emails, SMS (Smishing), or voice calls (Vishing).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="phishing-grid">
+                <!-- Phishing Content & Comparative Example -->
+            </div>
+        </section>
+
+        <!-- SECTION 5: BEST PRACTICES & HELPLINES -->
+        <section id="content-bestpractices" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-r from-emerald-900/40 to-teal-900/40 border border-emerald-500/30 rounded-2xl p-6 mb-8">
+                <h2 class="text-2xl font-bold text-emerald-300 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-shield-virus"></i> <span data-i18n="bp_title">Cyber Hygiene & Incident Reporting</span>
+                </h2>
+                <p class="text-slate-300 leading-relaxed" data-i18n="bp_desc">
+                    Essential security guidelines to guard your identity, data, and finances online, plus official Indian incident reporting channels.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="bp-grid">
+                <!-- Best Practices Cards -->
+            </div>
+
+            <!-- Indian Cybercrime Helpline Banner -->
+            <div class="mt-8 glass-card border-2 border-emerald-500/50 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+                <div class="flex items-center space-x-5">
+                    <div class="p-4 bg-emerald-500/20 rounded-2xl border border-emerald-500/40 text-emerald-400 text-3xl">
+                        <i class="fa-solid fa-phone-volume"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-1" data-i18n="helpline_title">National Cyber Crime Helpline (India)</h3>
+                        <p class="text-slate-300 text-sm" data-i18n="helpline_desc">Report financial fraud immediately within the golden hour to block perpetrator accounts.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto text-center">
+                    <a href="tel:1930" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-phone"></i> Call 1930
+                    </a>
+                    <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/40 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-globe"></i> cybercrime.gov.in
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: INTERACTIVE QUIZ -->
+        <section id="content-quiz" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 border border-amber-500/30">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-slate-800">
+                    <div>
+                        <h2 class="text-2xl font-bold text-amber-300 flex items-center gap-3">
+                            <i class="fa-solid fa-award"></i> <span data-i18n="quiz_main_title">Cybersecurity Knowledge Assessment</span>
+                        </h2>
+                        <p class="text-slate-400 text-sm mt-1" data-i18n="quiz_sub_title">Test your knowledge with 12 comprehensive questions across all cybersecurity topics.</p>
+                    </div>
+                    <div id="quiz-score-badge" class="hidden px-4 py-2 bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold rounded-xl">
+                        Score: <span id="quiz-score-val">0</span> / 12
+                    </div>
+                </div>
+
+                <!-- Quiz Active Container -->
+                <div id="quiz-active-container" class="mt-6 space-y-6">
+                    <div class="flex justify-between items-center text-sm font-semibold text-slate-400">
+                        <span id="quiz-progress-text">Question 1 of 12</span>
+                        <div class="w-1/2 bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                            <div id="quiz-progress-bar" class="bg-amber-400 h-full transition-all duration-300" style="width: 8.33%"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border border-slate-700">
+                        <h3 id="quiz-question-text" class="text-lg font-semibold text-white mb-6">Question text goes here?</h3>
+                        <div id="quiz-options-container" class="space-y-3">
+                            <!-- Dynamic Options Buttons -->
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button id="quiz-prev-btn" onclick="navigateQuiz(-1)" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> <span data-i18n="btn_prev">Previous</span>
+                        </button>
+                        <button id="quiz-next-btn" onclick="navigateQuiz(1)" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-sm transition">
+                            <span data-i18n="btn_next">Next</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Results Container -->
+                <div id="quiz-results-container" class="hidden mt-6 space-y-8 text-center py-6">
+                    <div class="inline-flex p-5 rounded-full bg-amber-500/20 text-amber-400 text-5xl mb-2">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white" data-i18n="quiz_complete">Quiz Completed!</h3>
+                    <p class="text-xl text-slate-300">
+                        <span data-i18n="your_score">You scored</span> <span id="final-score" class="font-bold text-amber-400 text-2xl">0</span> <span data-i18n="out_of">out of</span> 12.
+                    </p>
+                    <p id="quiz-feedback-msg" class="text-slate-400 max-w-md mx-auto"></p>
+
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
+                        <button onclick="restartQuiz()" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl transition flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> <span data-i18n="btn_retake">Retake Quiz</span>
+                        </button>
+                        <button onclick="toggleAnswerReview()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 font-semibold rounded-xl transition flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i> <span data-i18n="btn_review">Review Answers & Explanations</span>
+                        </button>
+                    </div>
+
+                    <!-- Answer Review Box -->
+                    <div id="quiz-review-box" class="hidden text-left mt-8 space-y-6 pt-6 border-t border-slate-800">
+                        <h4 class="text-xl font-bold text-cyan-300 mb-4" data-i18n="review_heading">Detailed Answer Key</h4>
+                        <div id="review-list" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 glass-card mt-12 py-6 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p data-i18n="footer_rights">© CyberGuard Awareness Initiative. Designed for Public Education.</p>
+            <p class="text-slate-400 flex items-center gap-2">
+                <i class="fa-solid fa-shield-cat text-cyan-400"></i> <span data-i18n="footer_tag">Stay Vigilant. Stay Secure.</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Global App State
+        let currentLang = 'en';
+        let currentTab = 'scams';
+        let currentQuizIdx = 0;
+        let userAnswers = new Array(12).fill(null);
+
+        // MULTILINGUAL DATA STORE
+        const translations = {
+            en: {
+                sub_heading: "Awareness & Security Knowledge Portal",
+                tab_scams: "Cyber Scams",
+                tab_viruses: "Viruses & Malware",
+                tab_ransomware: "Ransomware",
+                tab_phishing: "Spam & Phishing",
+                tab_bestpractices: "Best Practices",
+                tab_quiz: "Knowledge Quiz",
+                scams_title: "Understanding Cyber Scams",
+                scams_desc: "Cyber scams trick individuals into voluntary financial transfers or handing over confidential information through deception, urgency, and psychological manipulation.",
+                viruses_title: "Viruses & Malware Spectrum",
+                viruses_desc: "Malware (Malicious Software) includes any software intentionally designed to cause damage to a computer, server, client, or computer network.",
+                ransomware_title: "Ransomware Deep-Dive",
+                ransomware_desc: "Ransomware is a severe malware form that encrypts a victim's files, demanding payment (often cryptocurrency) to regain access.",
+                phishing_title: "Identifying Spam & Phishing",
+                phishing_desc: "Phishing attacks rely on tricking victims into clicking unsafe links or revealing passwords via fake emails, SMS (Smishing), or voice calls (Vishing).",
+                bp_title: "Cyber Hygiene & Incident Reporting",
+                bp_desc: "Essential security guidelines to guard your identity, data, and finances online, plus official Indian incident reporting channels.",
+                helpline_title: "National Cyber Crime Helpline (India)",
+                helpline_desc: "Report financial fraud immediately within the golden hour to block perpetrator accounts.",
+                quiz_main_title: "Cybersecurity Knowledge Assessment",
+                quiz_sub_title: "Test your knowledge with 12 comprehensive questions across all cybersecurity topics.",
+                btn_prev: "Previous",
+                btn_next: "Next",
+                quiz_complete: "Quiz Completed!",
+                your_score: "You scored",
+                out_of: "out of",
+                btn_retake: "Retake Quiz",
+                btn_review: "Review Answers & Explanations",
+                review_heading: "Detailed Answer Key",
+                footer_rights: "© CyberGuard Awareness Initiative. Designed for Public Education.",
+                footer_tag: "Stay Vigilant. Stay Secure."
+            },
+            mr: {
+                sub_heading: "सायबर जागरूकता आणि सुरक्षा ज्ञान पोर्टल",
+                tab_scams: "सायबर घोटाळे (Scams)",
+                tab_viruses: "व्हायरस व मालवेअर",
+                tab_ransomware: "रॅन्समवेअर (Ransomware)",
+                tab_phishing: "स्पॅम आणि फिशिंग",
+                tab_bestpractices: "सुरक्षितता सवयी",
+                tab_quiz: "ज्ञान परीक्षा (Quiz)",
+                scams_title: "सायबर घोटाळे समजून घ्या",
+                scams_desc: "सायबर घोटाळेबाज्ञ लोकांना फसवणूक, भीती आणि घाई दाखवून पैसे किंवा गोपनीय माहिती उघड करण्यास भाग पाडतात.",
+                viruses_title: "व्हायरस आणि मालवेअरचे प्रकार",
+                viruses_desc: "मालवेअर म्हणजे संगणक, सर्व्हर किंवा नेटवर्कचे नुकसान करण्यासाठी बनवलेले धोकादायक सॉफ्टवेअर.",
+                ransomware_title: "रॅन्समवेअर सखोल माहिती",
+                ransomware_desc: "रॅन्समवेअर हा एक घातक मालवेअर आहे जो फाइल्स एन्क्रिप्ट (लॉक) करतो आणि त्या अनलॉक करण्यासाठी खंडणी (रक्कम) मागतो.",
+                phishing_title: "स्पॅम आणि फिशिंग कसे ओळखायचे",
+                phishing_desc: "बोगस ईमेल, एसएमएस किंवा कॉलद्वारे लोकांकडून पासवर्ड किंवा बँक खात्याची माहिती मिळवणे म्हणजे फिशिंग.",
+                bp_title: "सायबर सुरक्षा आणि तक्रार नोंदणी",
+                bp_desc: "तुमची डिजिटल ओळख आणि पैसे सुरक्षित ठेवण्यासाठी महत्त्वाच्या सवयी व भारतातील हेल्पलाइन माहिती.",
+                helpline_title: "राष्ट्रीय सायबर अपराध हेल्पलाइन (भारत)",
+                helpline_desc: "आर्थिक फसवणूक झाल्यास त्वरित १९३० वर कॉल करून तक्रार नोंदवा.",
+                quiz_main_title: "सायबर सुरक्षा ज्ञान चाचणी",
+                quiz_sub_title: "सायबर सुरक्षेच्या सर्व विषयांवर आधारित १२ प्रश्नांची उत्तरे देऊन स्वतःचे ज्ञान तपासा.",
+                btn_prev: "मागे",
+                btn_next: "पुढील",
+                quiz_complete: "चाचणी पूर्ण झाली!",
+                your_score: "तुम्हाला मिळाले",
+                out_of: "पैकी",
+                btn_retake: "पुन्हा चाचणी द्या",
+                btn_review: "उत्तरे आणि स्पष्टीकरणे पहा",
+                review_heading: "सविस्तर उत्तर तालिका",
+                footer_rights: "© सायबर गार्ड जनजागृती उपक्रम. सार्वजनिक शिक्षणासाठी.",
+                footer_tag: "सतर्क राहा. सुरक्षित राहा."
+            },
+            hi: {
+                sub_heading: "साइबर जागरूकता और सुरक्षा ज्ञान पोर्टल",
+                tab_scams: "साइबर घोटाले (Scams)",
+                tab_viruses: "वायरस और मैलवेयर",
+                tab_ransomware: "रैनसमवेयर (Ransomware)",
+                tab_phishing: "स्पैम और फ़िशिंग",
+                tab_bestpractices: "सर्वोत्तम सुरक्षा उपाय",
+                tab_quiz: "ज्ञान परीक्षा (Quiz)",
+                scams_title: "साइबर घोटालों को समझें",
+                scams_desc: "साइबर घोटालेबाज़ धोखाधड़ी, तत्परता और झूठे वादों के माध्यम से वित्तीय ठगी या व्यक्तिगत जानकारी चुराते हैं।",
+                viruses_title: "वायरस और मैलवेयर के प्रकार",
+                viruses_desc: "मैलवेयर वह हानिकारक सॉफ्टवेयर है जो आपके कंप्यूटर, मोबाइल या नेटवर्क को नुकसान पहुंचाने के लिए बनाया जाता है।",
+                ransomware_title: "रैनसमवेयर की विस्तृत जानकारी",
+                ransomware_desc: "रैनसमवेयर एक खतरनाक मैलवेयर है जो आपकी फाइलों को लॉक (एन्क्रिप्ट) कर देता है और खोलने के बदले फिरौती मांगता है।",
+                phishing_title: "स्पैम और फ़िशिंग की पहचान",
+                phishing_desc: "फर्जी ईमेल, एसएमएस या कॉल के जरिए गोपनीय डेटा या पासवर्ड चुराने की प्रक्रिया को फ़िशिंग कहते हैं।",
+                bp_title: "साइबर सुरक्षा एवं शिकायत दर्ज करना",
+                bp_desc: "ऑनलाइन सुरक्षित रहने के लिए आवश्यक आदतें और भारत में साइबर अपराध दर्ज करने के आधिकारिक माध्यम।",
+                helpline_title: "राष्ट्रीय साइबर अपराध हेल्पलाइन (भारत)",
+                helpline_desc: "वित्तीय धोखाधड़ी होने पर तुरंत 1930 पर कॉल करें ताकि अपराधियों के खाते ब्लॉक किए जा सकें।",
+                quiz_main_title: "साइबर सुरक्षा ज्ञान परीक्षा",
+                quiz_sub_title: "साइबर सुरक्षा के सभी विषयों पर आधारित 12 प्रश्नों के उत्तर देकर अपने ज्ञान का परीक्षण करें।",
+                btn_prev: "पीछे",
+                btn_next: "आगे",
+                quiz_complete: "परीक्षा पूर्ण हुई!",
+                your_score: "आपका स्कोर",
+                out_of: "में से",
+                btn_retake: "पुनः प्रयास करें",
+                btn_review: "उत्तर एवं स्पष्टीकरण देखें",
+                review_heading: "विस्तृत उत्तर कुंजी",
+                footer_rights: "© साइबर गार्ड जागरूकता पहल। जन शिक्षा हेतु निर्मित।",
+                footer_tag: "सतर्क रहें। सुरक्षित रहें।"
+            }
+        };
+
+        // SCAMS DATA
+        const scamsData = [
+            {
+                icon: "fa-cart-shopping",
+                color: "text-amber-400",
+                title: { en: "Online Shopping Fraud", mr: "ऑनलाइन खरेदी फसवणूक", hi: "ऑनलाइन शॉपिंग धोखाधड़ी" },
+                desc: {
+                    en: "Fake e-commerce websites selling luxury items at absurdly low prices. Victims pay upfront but never receive the item.",
+                    mr: "खूप कमी किमतीत वस्तू दाखवून फसव्या वेबसाईटवरून लोकांकडून पैसे उकळणे व वस्तू न पाठवणे.",
+                    hi: "बेहद कम दामों पर सामान बेचने का लालच देकर फर्जी वेबसाइट्स से पैसे ठगना और सामान न भेजना।"
+                },
+                redFlags: {
+                    en: "Unbelievable discounts, lack of contact address, no COD option, newly registered domain names.",
+                    mr: "अतिशय स्वस्त दर, संपर्क पत्ता नसणे, कॅश ऑन डिलिव्हरी पर्याय नसणे.",
+                    hi: "अविश्वसनीय छूट, संपर्क पता न होना, कैश ऑन डिलीवरी विकल्प न होना।"
+                }
+            },
+            {
+                icon: "fa-headset",
+                color: "text-cyan-400",
+                title: { en: "Tech Support Scams", mr: "टेक सपोर्ट स्कॅम", hi: "टेक सपोर्ट स्कैम" },
+                desc: {
+                    en: "Scammers show pop-ups claiming your system has a virus and prompt you to call a toll-free number where fraudsters demand remote access.",
+                    mr: "संगणकात व्हायरस असल्याचा खोटा पॉप-अप दाखवून रिमोट ॲक्सेस ॲप डाऊनलोड करायला लावणे व पैसे उकळणे.",
+                    hi: "कंप्यूटर में वायरस होने का फर्जी पॉप-अप दिखाकर रिमोट एक्सेस ऐप डाउनलोड करवाना और पैसे ठगना।"
+                },
+                redFlags: {
+                    en: "Unsolicited browser pop-ups with loud alarms, demands for remote tools like AnyDesk/TeamViewer.",
+                    mr: "अचानक येणारे पॉप-अप संदेश, AnyDesk/TeamViewer डाऊनलोड करण्याचा आग्रह.",
+                    hi: "अचानक आने वाले पॉप-अप, AnyDesk/TeamViewer डाउनलोड करने का दबाव।"
+                }
+            },
+            {
+                icon: "fa-chart-line",
+                color: "text-emerald-400",
+                title: { en: "Investment & Crypto Scams", mr: "गुंतवणूक व क्रिप्टो स्कॅम", hi: "इन्वेस्टमेंट और क्रिप्टो स्कैम" },
+                desc: {
+                    en: "Promises of guaranteed high returns on stock trading, forex, or cryptocurrency via WhatsApp/Telegram groups.",
+                    mr: "व्हॉट्सॲप/टेलिग्राम ग्रुपद्वारे शेअर मार्केट किंवा क्रिप्टोमध्ये दुप्पट परताव्याचे खोटे आमिष दाखवणे.",
+                    hi: "व्हाट्सएप/टेलीग्राम ग्रुप के जरिए शेयर बाजार या क्रिप्टो में दोगुने मुनाफे का झूठा लालच देना।"
+                },
+                redFlags: {
+                    en: "Guaranteed high profits with zero risk, trading on unregistered mobile apps.",
+                    mr: "विना-धोका जास्त नफ्याची हमी, अनोळखी ॲप्सवर ट्रेडिंग करण्याची सक्ती.",
+                    hi: "बिना जोखिम अधिक मुनाफे की गारंटी, अनजान ऐप्स पर ट्रेडिंग करने का दबाव।"
+                }
+            },
+            {
+                icon: "fa-briefcase",
+                color: "text-indigo-400",
+                title: { en: "Part-time Job Scams", mr: "पार्ट-टाईम जॉब स्कॅम", hi: "पार्ट-टाइम जॉब स्कैम" },
+                desc: {
+                    en: "Offers for easy work-from-home tasks (like liking YouTube videos). Victims are tricked into paying 'prepaid fees' to unlock earnings.",
+                    mr: "यूट्यूब व्हिडिओ लाईक करून दररोज हजारो रुपये कमवण्याचे आमिष दाखवून 'प्रीपेड टास्क'च्या नावाखाली पैसे उकळणे.",
+                    hi: "यूट्यूब वीडियो लाइक करके रोजाना पैसे कमाने का लालच देकर 'प्रीपेड टास्क' के नाम पर पैसे ठगना।"
+                },
+                redFlags: {
+                    en: "Requirement to deposit money first before getting paid, communication solely on Telegram.",
+                    mr: "काम सुरू करण्यापूर्वी पैसे भरण्याची अट, फक्त टेलिग्रामवरून संवाद.",
+                    hi: "काम शुरू करने से पहले पैसे जमा करने की शर्त, केवल टेलीग्राम पर बातचीत।"
+                }
+            },
+            {
+                icon: "fa-qrcode",
+                color: "text-rose-400",
+                title: { en: "QR Code UPI Fraud", mr: "क्यूआर कोड (QR Code) फसवणूक", hi: "क्यूआर कोड (QR Code) धोखाधड़ी" },
+                desc: {
+                    en: "Fraudsters send QR codes claiming they are sending money to you, but scanning/entering PIN actually deducts money.",
+                    mr: "पैसे मिळवण्यासाठी क्यूआर कोड स्कॅन करून पिन टाकण्यास सांगणे. (स्मरण ठेवा: पैसे मिळवण्यासाठी PIN ची गरज नसते).",
+                    hi: "पैसे प्राप्त करने के नाम पर QR कोड स्कैन करवाकर PIN दर्ज करवाना। (याद रखें: पैसे प्राप्त करने के लिए PIN की आवश्यकता नहीं होती)।"
+                },
+                redFlags: {
+                    en: "Buyer asking you to scan QR code to RECEIVED funds.",
+                    mr: "पैसे मिळवण्यासाठी QR कोड स्कॅन किंवा PIN टाकण्याची विनंती.",
+                    hi: "पैसे प्राप्त करने के लिए QR कोड स्कैन या PIN दर्ज करने का अनुरोध।"
+                }
+            },
+            {
+                icon: "fa-gift",
+                color: "text-purple-400",
+                title: { en: "Lottery & Gift Scams", mr: "लॉटरी व बक्षीस घोटाळा", hi: "लॉटरी और उपहार घोटाला" },
+                desc: {
+                    en: "Messages claiming you won millions in a lottery (KBC, International Lucky Draw) requiring 'processing fees' to claim.",
+                    mr: "तुम्हाला करोडो रुपयांची लॉटरी लागल्याचा मेसेज पाठवून 'प्रोसेसिंग फी'च्या नावाखाली पैसे मागणे.",
+                    hi: "आपको करोड़ों रुपये की लॉटरी लगने का मैसेज भेजकर 'प्रोसेसिंग फीस' के नाम पर पैसे मांगना।"
+                },
+                redFlags: {
+                    en: "Winning a contest you never entered, requests for advance tax or fee payments.",
+                    mr: "सहभाग न घेतलेल्या स्पर्धेत बक्षीस जिंकल्याचा दावा, आगाऊ शुल्काची मागणी.",
+                    hi: "बिना भाग लिए प्रतियोगिता जीतने का दावा, अग्रिम शुल्क की मांग।"
+                }
+            }
+        ];
+
+        // VIRUSES DATA
+        const virusesData = [
+            {
+                icon: "fa-virus",
+                color: "text-red-400",
+                title: { en: "Computer Viruses", mr: "संगणक व्हायरस (Virus)", hi: "कंप्यूटर वायरस (Virus)" },
+                desc: {
+                    en: "Malicious code attached to clean executable files that replicates when the host file is executed.",
+                    mr: "एखाद्या फाइलला चिकटून राहणारा आणि फाइल सुरू केल्यावर सिस्टीममधील इतर फाइल्स खराब करणारा कोड.",
+                    hi: "किसी फाइल से जुड़कर उसे नुकसान पहुंचाने वाला और फाइल चलाने पर फैलने वाला हानिकारक कोड।"
+                }
+            },
+            {
+                icon: "fa-horse-head",
+                color: "text-amber-400",
+                title: { en: "Trojan Horses", mr: "ट्रोजन हॉर्स (Trojan)", hi: "ट्रोजन हॉर्स (Trojan)" },
+                desc: {
+                    en: "Disguised as legitimate, useful software (e.g., free game, media player) to trick users into installing backdoor access.",
+                    mr: "उपयुक्त सॉफ्टवेअरचे सोंग घेऊन सिस्टीममध्ये प्रवेश करणारा आणि हॅकर्सना मागील दाराने प्रवेश देणारा प्रोग्राम.",
+                    hi: "उपयोगी सॉफ्टवेयर का नाटक करके सिस्टम में घुसने वाला और हैकर्स को सीक्रेट एक्सेस देने वाला प्रोग्राम।"
+                }
+            },
+            {
+                icon: "fa-user-secret",
+                color: "text-purple-400",
+                title: { en: "Spyware & Keyloggers", mr: "स्पायवेअर आणि की-लॉगर्स", hi: "स्पाइवेयर और की-लॉगर्स" },
+                desc: {
+                    en: "Secretly monitors user activity, captures keystrokes, passwords, and banking details without consent.",
+                    mr: "तुमच्या नकळत तुम्ही टाईप केलेले पासवर्ड, बँक तपशील आणि माहिती हॅकरकडे पाठवणारा सॉफ्टवेअर.",
+                    hi: "आपकी जानकारी के बिना आपके द्वारा टाइप किए गए पासवर्ड और बैंकिंग विवरण चुराने वाला सॉफ्टवेयर।"
+                }
+            },
+            {
+                icon: "fa-bug",
+                color: "text-emerald-400",
+                title: { en: "Worms", mr: "संगणक वर्म्स (Worms)", hi: "कंप्यूटर वर्म्स (Worms)" },
+                desc: {
+                    en: "Self-replicating malware that spreads across networks automatically without human interaction.",
+                    mr: "मानवी हस्तक्षेपाशिवाय नेटवर्कद्वारे स्वतःची प्रत तयार करून इतर संगणकांमध्ये पसरणारा घातक कोड.",
+                    hi: "बिना मानवीय हस्तक्षेप के नेटवर्क के माध्यम से स्वतः फैलने और सिस्टम को धीमा करने वाला कोड।"
+                }
+            },
+            {
+                icon: "fa-masks-theater",
+                color: "text-cyan-400",
+                title: { en: "Rootkits", mr: "रूटकिट्स (Rootkits)", hi: "रूटकिट्स (Rootkits)" },
+                desc: {
+                    en: "Provides administrator-level control to attackers while hiding its presence deep inside the operating system.",
+                    mr: "ऑपरेटिंग सिस्टीमच्या खोलीत लपून हॅकरला संगणकाचे पूर्ण प्रशासकीय अधिकार देणारा मालवेअर.",
+                    hi: "ऑपरेटिंग सिस्टम के अंदर छुपकर हैकर को कंप्यूटर का पूरा नियंत्रण देने वाला मैलवेयर।"
+                }
+            },
+            {
+                icon: "fa-rectangle-ad",
+                color: "text-orange-400",
+                title: { en: "Adware", mr: "ॲडवेअर (Adware)", hi: "एडवेयर (Adware)" },
+                desc: {
+                    en: "Automatically generates unwanted pop-up advertisements, often redirecting users to shady websites.",
+                    mr: "स्क्रीनवर सतत त्रासदायक जाहिराती दाखवणारा आणि संशयित वेबसाईटवर घेऊन जाणारा प्रोग्राम.",
+                    hi: "स्क्रीन पर लगातार अवांछित विज्ञापन दिखाने और फर्जी वेबसाइट्स पर रिडायरेक्ट करने वाला प्रोग्राम।"
+                }
+            }
+        ];
+
+        // RANSOMWARE DATA
+        const ransomwareData = {
+            overview: {
+                en: "How Ransomware Works: Infection Vector -> Execution -> Encryption of Files -> Ransom Demand Notice.",
+                mr: "रॅन्समवेअर कसे काम करते: संसर्ग -> अंमलबजावणी -> फाइल्स एन्क्रिप्शन (लॉक करणे) -> खंडणीची मागणी.",
+                hi: "रैनसमवेयर कैसे काम करता है: संक्रमण -> निष्पादन -> फाइलों का एन्क्रिप्शन (लॉक होना) -> फिरौती की मांग।"
+            },
+            notable: [
+                { name: "WannaCry", desc: { en: "Exploited EternalBlue SMB vulnerability in 2017 affecting 200,000+ computers globally.", mr: "२०१७ मधील सर्वात मोठा हल्ला ज्याने जागतिक स्तरावर २ लाखांहून अधिक संगणक ठप्प केले.", hi: "2017 में दुनिया भर के 2 लाख से अधिक कंप्यूटरों को प्रभावित करने वाला बड़ा हमला।" } },
+                { name: "REvil / Sodinokibi", desc: { en: "Ransomware-as-a-Service model targeting large supply chains and infrastructure.", mr: "मोठ्या कंपन्या आणि पुरवठा साखळीवर हल्ला करणारा प्रसिद्ध रॅन्समवेअर गट.", hi: "बड़ी कंपनियों और आपूर्ति श्रृंखलाओं को निशाना बनाने वाला गिरोह।" } },
+                { name: "LockBit", desc: { en: "Self-spreading ransomware known for high-speed encryption and double extortion.", mr: "जलद गतीने फाइल्स लॉक करून डेटा चोरीची धमकी देणारा अत्याधुनिक रॅन्समवेअर.", hi: "तेजी से फाइलों को लॉक करके डेटा लीक करने की धमकी देने वाला मैलवेयर।" } }
+            ]
+        };
+
+        // PHISHING DATA
+        const phishingData = [
+            {
+                title: { en: "Email Sender Spoofing", mr: "ईमेल आयडीची बनावटगिरी", hi: "ईमेल सेंडर स्पूफिंग" },
+                desc: { en: "Attackers alter email headers so it appears from a trusted domain (e.g., support@paypaI.com using capital 'i' instead of 'l').", mr: "खऱ्या कंपनीसारखा दिसणारा पण स्पेलिंगमध्ये सूक्ष्म बदल असलेला ईमेल आयडी वापरणे.", hi: "असली कंपनी जैसा दिखने वाला लेकिन स्पेलिंग में मामूली बदलाव वाला फर्जी ईमेल।" }
+            },
+            {
+                title: { en: "Urgency & Threat Tactics", mr: "भीती आणि घाई निर्माण करणे", hi: "आपातकाल और भय का माहौल" },
+                desc: { en: "Messages like 'Account Suspended in 2 hours' or 'Legal Action Imminent' panic victims into acting fast without verifying.", mr: "'खाते २ तासांत बंद होईल' अशी भीती दाखवून घाईघाईत लिंकवर क्लिक करायला लावणे.", hi: "'खाता 2 घंटे में बंद हो जाएगा' जैसी धमकी देकर घबराहट में गलत कदम उठवाना।" }
+            },
+            {
+                title: { en: "Malicious Attachments & Links", mr: "घातक लिंक्स आणि फाइल्स", hi: "हानिकारक लिंक्स और फाइल्स" },
+                desc: { en: "Attachments containing double extensions (.pdf.exe) or shortened URLs hiding phishing login portals.", mr: ".pdf.exe सारख्या फसव्या फायली किंवा शॉर्ट लिंक्सद्वारे बनावट लॉगिन पेजवर घेऊन जाणे.", hi: ".pdf.exe जैसी फर्जी फाइलें या शॉर्ट लिंक्स द्वारा नकली लॉगिन पेज पर ले जाना।" }
+            }
+        ];
+
+        // BEST PRACTICES DATA
+        const bestPracticesData = [
+            {
+                title: { en: "Strong Password Hygiene", mr: "मजबूत पासवर्डची सवय", hi: "मजबूत पासवर्ड नियम" },
+                desc: { en: "Use passphrases over 12 characters combining symbols, numbers, and uppercase letters. Never reuse passwords.", mr: "१२ पेक्षा जास्त अक्षरांचा पासवर्ड वापरा. त्यात चिन्हे आणि अंकांचा समावेश करा. एकापेक्षा जास्त ठिकाणी एकच पासवर्ड वापरू नका.", hi: "12 से अधिक अक्षरों का पासवर्ड बनाएं जिसमें संकेत और अंक शामिल हों। एक ही पासवर्ड कई जगह न दोहराएं।" },
+                icon: "fa-key", color: "text-cyan-400"
+            },
+            {
+                title: { en: "Multi-Factor Authentication (MFA)", mr: "टू-फॅक्टर ऑथेंटिकेशन (2FA)", hi: "टू-फैक्टर प्रमाणीकरण (MFA)" },
+                desc: { en: "Enable 2FA/MFA across all email, social media, and banking accounts to add a crucial second barrier.", mr: "सर्व सोशल मीडिया आणि बँकिंग खात्यांवर 2FA सुरू करा जेणेकरून पासवर्ड लीक झाला तरी खाते सुरक्षित राहील.", hi: "सभी सोशल मीडिया और बैंकिंग खातों पर 2FA सक्षम करें ताकि पासवर्ड लीक होने पर भी खाता सुरक्षित रहे।" },
+                icon: "fa-shield-halved", color: "text-emerald-400"
+            },
+            {
+                title: { en: "Regular Software Updates", mr: "सॉफ्टवेअर नियमित अपडेट ठेवा", hi: "नियमित सॉफ्टवेयर अपडेट" },
+                desc: { en: "Keep OS and apps updated to patch security vulnerabilities exploited by hackers.", mr: "मोबाइल आणि कॉम्प्युटरमधील ॲप्स आणि सिस्टीम नियमित अपडेट ठेवा जेणेकरून सुरक्षेतील त्रुटी दूर होतील.", hi: "मोबाइल और सिस्टम के सॉफ्टवेयर को हमेशा अपडेट रखें ताकि सुरक्षा खामियों को बंद किया जा सके।" },
+                icon: "fa-rotate", color: "text-purple-400"
+            },
+            {
+                title: { en: "Data Backups (3-2-1 Rule)", mr: "डेटा बॅकअप (3-2-1 नियम)", hi: "डेटा बैकअप (3-2-1 नियम)" },
+                desc: { en: "Keep 3 copies of important data on 2 different media types, with 1 copy stored offline or offsite.", mr: "महत्त्वाच्या फायलींचा बॅकअप घ्या. १ प्रत इंटरनेटशी न जोडलेल्या हार्ड डिस्कवर सुरक्षित ठेवा.", hi: "महत्वपूर्ण डेटा का बैकअप रखें। 1 कॉपी पेनड्राइव या ऑफलाइन हार्ड डिस्क में सुरक्षित रखें।" },
+                icon: "fa-database", color: "text-amber-400"
+            }
+        ];
+
+        // 12 QUIZ QUESTIONS DATA
+        const quizQuestions = [
+            {
+                q: {
+                    en: "1. You receive an SMS claiming you won a prize, asking you to click a link to claim it. What should you do?",
+                    mr: "१. तुम्हाला लॉटरी जिंकल्याचा मेसेज येतो आणि लिंकवर क्लिक करण्यास सांगितले जाते. तुम्ही काय कराल?",
+                    hi: "1. आपको लॉटरी जीतने का एसएमएस मिलता है और लिंक पर क्लिक करने को कहा जाता है। आप क्या करेंगे?"
+                },
+                options: [
+                    { en: "Click the link immediately", mr: "तरतच लिंकवर क्लिक कराल", hi: "तुरंत लिंक पर क्लिक करेंगे" },
+                    { en: "Ignore and delete the SMS", mr: "मेसेज दुर्लक्षित करून हटवून टाकाल", hi: "मैसेज को नजरअंदाज करके डिलीट कर देंगे" },
+                    { en: "Forward it to all contacts", mr: "इतर मित्रांना पाठवाल", hi: "अन्य दोस्तों को शेयर करेंगे" },
+                    { en: "Reply with banking details", mr: "बँक खात्याची माहिती पाठवाल", hi: "बैंक खाते का विवरण भेज देंगे" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "Unsolicited reward links are classic smishing traps. Never click on unverified links.",
+                    mr: "अनोळखी बक्षीसांच्या लिंक्स फिशिंग ट्रॅप असतात. त्यावर कधीही क्लिक करू नका.",
+                    hi: "अनजान इनाम की लिंक्स फ़िशिंग जाल होती हैं। उन पर कभी क्लिक न करें।"
+                }
+            },
+            {
+                q: {
+                    en: "2. Is entering your UPI PIN required to RECEIVE money in your bank account?",
+                    mr: "२. खात्यात पैसे प्राप्त करण्यासाठी (Receive) युपीआय पिन (UPI PIN) टाकण्याची गरज असते का?",
+                    hi: "2. क्या बैंक खाते में पैसे प्राप्त (Receive) करने के लिए UPI PIN दर्ज करना आवश्यक है?"
+                },
+                options: [
+                    { en: "Yes, always required", mr: "होय, नेहमी लागतो", hi: "हां, हमेशा आवश्यक है" },
+                    { en: "Only for transactions above ₹1000", mr: "फक्त १,००० रुपयांपेक्षा जास्त रकमेसाठी", hi: "केवल ₹1000 से अधिक लेनदेन के लिए" },
+                    { en: "No, UPI PIN is ONLY needed to SEND/PAY money", mr: "नाही, UPI PIN फक्त पैसे पाठवण्यासाठीच वापरला जातो", hi: "नहीं, UPI PIN केवल पैसे भेजने/भुगतान के लिए होता है" },
+                    { en: "Yes, to unlock the payment", mr: "होय, पेमेंट अनलॉक करण्यासाठी", hi: "हां, पेमेंट अनलॉक करने के लिए" }
+                ],
+                correct: 2,
+                exp: {
+                    en: "Golden Rule: UPI PIN is strictly for deducting/paying money from your account, never for receiving.",
+                    mr: "गोल्डन रूल: युपीआय पिन फक्त पैसे तुमच्या खात्यातून कट होण्यासाठी किंवा पाठवण्यासाठीच वापरला जातो.",
+                    hi: "गोल्डन रूल: UPI PIN केवल आपके खाते से पैसे भेजने के लिए होता है, प्राप्त करने के लिए नहीं।"
+                }
+            },
+            {
+                q: {
+                    en: "3. What type of malware encrypts your files and demands payment to restore access?",
+                    mr: "३. फायली लॉक (एन्क्रिप्ट) करून त्या अनलॉक करण्यासाठी पैशांची मागणी करणाऱ्या मालवेअरला काय म्हणतात?",
+                    hi: "3. फाइलों को लॉक करके उन्हें खोलने के बदले पैसे मांगने वाले मैलवेयर को क्या कहते हैं?"
+                },
+                options: [
+                    { en: "Spyware", mr: "स्पायवेअर", hi: "स्पाइवेयर" },
+                    { en: "Adware", mr: "ॲडवेअर", hi: "एडवेयर" },
+                    { en: "Ransomware", mr: "रॅन्समवेअर (Ransomware)", hi: "रैनसमवेयर (Ransomware)" },
+                    { en: "Worm", mr: "वर्म (Worm)", hi: "वर्म (Worm)" }
+                ],
+                correct: 2,
+                exp: {
+                    en: "Ransomware locks victim files using encryption and demands ransom money.",
+                    mr: "रॅन्समवेअर फाइल्स एन्क्रिप्ट करून खंडणी मागतो.",
+                    hi: "रैनसमवेयर फाइलों को एन्क्रिप्ट करके फिरौती मांगता है।"
+                }
+            },
+            {
+                q: {
+                    en: "4. What is Multi-Factor Authentication (MFA/2FA)?",
+                    mr: "४. मल्टी-फॅक्टर ऑथेंटिकेशन (MFA/2FA) म्हणजे काय?",
+                    hi: "4. मल्टी-फैक्टर प्रमाणीकरण (MFA/2FA) क्या है?"
+                },
+                options: [
+                    { en: "Using two passwords at the same time", mr: "एकाच वेळी दोन पासवर्ड वापरणे", hi: "एक ही समय में दो पासवर्ड का उपयोग" },
+                    { en: "A security process requiring two or more verification factors to log in", mr: "लॉगिन करण्यासाठी पासवर्डसोबत OTP/ॲपद्वारे अतिरिक्त पडताळणी पद्धत", hi: "लॉगिन के लिए पासवर्ड के साथ OTP या अतिरिक्त सत्यापन तरीका" },
+                    { en: "Updating software twice a month", mr: "महिन्यातून दोनदा सॉफ्टवेअर अपडेट करणे", hi: "महीने में दो बार सॉफ्टवेयर अपडेट करना" },
+                    { en: "An antivirus software name", mr: "अँटीव्हायरस सॉफ्टवेअरचे नाव", hi: "एक एंटीवायरस सॉफ्टवेयर का नाम" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "MFA adds extra layers of defense (e.g., Password + OTP) beyond just a password.",
+                    mr: "MFA मुळे पासवर्डशिवाय OTP सारखी दुहेरी सुरक्षा मिळते.",
+                    hi: "MFA पासवर्ड के अलावा OTP जैसा अतिरिक्त सुरक्षा स्तर प्रदान करता है।"
+                }
+            },
+            {
+                q: {
+                    en: "5. What is the dedicated Cybercrime Helpline number in India for immediate reporting of financial fraud?",
+                    mr: "५. भारतात ऑनलाइन आर्थिक फसवणूक झाल्यास त्वरित मदत मिळवण्यासाठी राष्ट्रीय हेल्पलाइन क्रमांक कोणता आहे?",
+                    hi: "5. भारत में ऑनलाइन वित्तीय धोखाधड़ी की तुरंत रिपोर्ट करने के लिए हेल्पलाइन नंबर क्या है?"
+                },
+                options: [
+                    { en: "100", mr: "१००", hi: "100" },
+                    { en: "1930", mr: "१९३०", hi: "1930" },
+                    { en: "108", mr: "१०८", hi: "108" },
+                    { en: "112", mr: "११२", hi: "112" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "1930 is India's official National Cyber Crime Helpline for reporting cyber frauds.",
+                    mr: "१९३० हा भारतातील सायबर गुन्ह्यांची तक्रार नोंदवण्यासाठी अधिकृत हेल्पलाइन क्रमांक आहे.",
+                    hi: "1930 भारत का आधिकारिक राष्ट्रीय साइबर अपराध हेल्पलाइन नंबर है।"
+                }
+            },
+            {
+                q: {
+                    en: "6. A pop-up alerts that your computer is infected and asks you to install AnyDesk for support. Should you do it?",
+                    mr: "६. कॉम्प्युटरवर व्हायरसचा पॉप-अप आला आणि AnyDesk डाऊनलोड करायला सांगितले तर ते करावे का?",
+                    hi: "6. कंप्यूटर पर वायरस का पॉप-अप दिखा और AnyDesk डाउनलोड करने को कहा गया। क्या ऐसा करना चाहिए?"
+                },
+                options: [
+                    { en: "Yes, to clean the system immediately", mr: "होय, संगणक साफ करण्यासाठी", hi: "हां, सिस्टम साफ करने के लिए" },
+                    { en: "No, it is a Tech Support scam attempting remote access", mr: "नाही, हा टेक सपोर्ट स्कॅम असून रिमोट ॲक्सेस घेण्याचा प्रयत्न आहे", hi: "नहीं, यह टेक सपोर्ट स्कैम है जो आपके सिस्टम का एक्सेस चाहता है" },
+                    { en: "Yes, if it claims to be from Microsoft", mr: "मायक्रोसॉफ्टकडून असल्याचा दावा असल्यास नक्कीच", hi: "माइक्रोसॉफ्ट की तरफ से हो तो हां" },
+                    { en: "Only if you pay first", mr: "फक्त आधी पैसे भरले तरच", hi: "केवल पहले भुगतान करने पर" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "Legitimate tech companies never display browser pop-ups demanding remote connections.",
+                    mr: "अधिकृत कंपन्या कधीही स्क्रीनवर पॉप-अप दाखवून रिमोट ॲक्सेस मागत नाहीत.",
+                    hi: "प्रामाणिक कंपनियां कभी भी ब्राउजर पॉप-अप दिखाकर रिमोट एक्सेस नहीं मांगतीं।"
+                }
+            },
+            {
+                q: {
+                    en: "7. Which of the following represents a strong password practices?",
+                    mr: "७. खालीलपैकी कोणता पर्याय मजबूत पासवर्डचे उत्तम उदाहरण आहे?",
+                    hi: "7. निम्नलिखित में से कौन सा विकल्प एक मजबूत पासवर्ड का सही उदाहरण है?"
+                },
+                options: [
+                    { en: "Password123", mr: "Password123", hi: "Password123" },
+                    { en: "Your birthdate or phone number", mr: "तुमची जन्मतारीख किंवा मोबाईल नंबर", hi: "आपकी जन्मतिथि या मोबाइल नंबर" },
+                    { en: "Tr0p1c#Suns3t!99 (12+ mixed characters)", mr: "Tr0p1c#Suns3t!99 (अक्षर, अंक व चिन्हांचे मिश्रण)", hi: "Tr0p1c#Suns3t!99 (अक्षर, अंक और प्रतीकों का मिश्रण)" },
+                    { en: "Your first name backwards", mr: "तुमचे स्वतःचे नाव उलटे टाईप करणे", hi: "अपना नाम उल्टा टाइप करना" }
+                ],
+                correct: 2,
+                exp: {
+                    en: "Strong passwords use a long passphrase with mixed case, numbers, and special symbols.",
+                    mr: "मजबूत पासवर्डमध्ये मोठी लांबी, विशेष चिन्हे, अंक आणि अक्षरांचे मिश्रण असते.",
+                    hi: "मजबूत पासवर्ड में बड़ी लंबाई, विशेष प्रतीक, अंक और अक्षरों का मिश्रण होता है।"
+                }
+            },
+            {
+                q: {
+                    en: "8. What is 'Smishing'?",
+                    mr: "८. 'स्मिशिंग' (Smishing) म्हणजे काय?",
+                    hi: "8. 'स्मिशिंग' (Smishing) क्या है?"
+                },
+                options: [
+                    { en: "Phishing conducted via SMS text messages", mr: "टेक्स्ट मेसेज (SMS) द्वारे केली जाणारी फसवणूक", hi: "एसएमएस (SMS) के माध्यम से की जाने वाली फ़िशिंग" },
+                    { en: "Cleaning up dust from a server", mr: "सर्व्हरची साफसफाई करणे", hi: "सर्वर की सफाई करना" },
+                    { en: "Sending physical junk mail", mr: "टपालाने फसवणूक पत्र पाठवणे", hi: "डाक से फर्जी पत्र भेजना" },
+                    { en: "Voice call scam", mr: "व्हॉईस कॉल घोटाळा", hi: "वॉइस कॉल घोटाला" }
+                ],
+                correct: 0,
+                exp: {
+                    en: "Smishing = SMS + Phishing. Phishing carried out through text messages.",
+                    mr: "स्मिशिंग म्हणजे एसएमएसद्वारे बनावट लिंक्स पाठवून केली जाणारी फसवणूक.",
+                    hi: "स्मिशिंग का अर्थ है एसएमएस के जरिए फर्जी लिंक्स भेजकर की जाने वाली ठगी।"
+                }
+            },
+            {
+                q: {
+                    en: "9. Why is connecting to unsecured public Wi-Fi networks risky?",
+                    mr: "९. सार्वजनिक ठिकाणचे मोफत (Public Wi-Fi) वापरणे धोकादायक का असू शकते?",
+                    hi: "9. सार्वजनिक मुफ्त वाई-फाई (Public Wi-Fi) का उपयोग करना जोखिम भरा क्यों हो सकता है?"
+                },
+                options: [
+                    { en: "It drains your battery fast", mr: "त्यामुळे बॅटरी लवकर संपते", hi: "इससे बैटरी जल्दी खत्म होती है" },
+                    { en: "Attackers can intercept your transmitted sensitive data", mr: "हॅकर्स तुमच्या फोनमधील माहिती आणि पासवर्ड चोरू शकतात", hi: "हैकर्स आपका डेटा और पासवर्ड बीच में ही चुरा सकते हैं" },
+                    { en: "It slows down phone screen", mr: "स्क्रीन मंद होते", hi: "स्क्रीन धीमी हो जाती है" },
+                    { en: "It deletes saved contacts", mr: "संपर्क नंबर हटवले जातात", hi: "सेव कांटेक्ट डिलीट हो जाते हैं" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "Unencrypted public Wi-Fi enables Man-in-the-Middle (MitM) attacks to steal sensitive data.",
+                    mr: "सार्वजनिक वाय-फाय नेटवर्क सुरक्षित नसल्याने हॅकर्स ट्रॅफिक हॅक करून पासवर्ड चुरू शकतात.",
+                    hi: "सार्वजनिक वाई-फाई पर सुरक्षा न होने से हैकर्स पासवर्ड और डेटा इंटरसेप्ट कर सकते हैं।"
+                }
+            },
+            {
+                q: {
+                    en: "10. What does 'Trojan Horse' malware do?",
+                    mr: "१०. 'ट्रोजन हॉर्स' मालवेअर काय काम करतो?",
+                    hi: "10. 'ट्रोजन हॉर्स' मैलवेयर क्या काम करता है?"
+                },
+                options: [
+                    { en: "Speeds up your internet browser", mr: "इंटरनेटचा वेग वाढवतो", hi: "इंटरनेट स्पीड बढ़ाता है" },
+                    { en: "Disguises itself as legitimate software to trick you into downloading it", mr: "चांगल्या सॉफ्टवेअरचे सोंग घेऊन संगणकात प्रवेश करतो", hi: "उपयोगी ऐप का नाटक करके कंप्यूटर में घुसपैठ करता है" },
+                    { en: "Fixes operating system bugs", mr: "सिस्टीममधील त्रुटी दुरुस्त करतो", hi: "सिस्टम की कमियां ठीक करता है" },
+                    { en: "Backs up your photographs automatically", mr: "फोटोंचा बॅकअप घेतो", hi: "फोटो का बैकअप लेता है" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "Trojans trick users by appearing harmless or useful while concealing malicious code.",
+                    mr: "ट्रोजन बनावट चांगल्या सॉफ्टवेअरच्या रूपात लपून सिस्टीमवर ताबा मिळवतो.",
+                    hi: "ट्रोजन असली सॉफ्टवेयर का छलावा देकर सिस्टम में मैलवेयर डाउनलोड करवाता है।"
+                }
+            },
+            {
+                q: {
+                    en: "11. What is the official portal of the Indian government to report cybercrimes online?",
+                    mr: "११. भारतात ऑनलाइन सायबर गुन्ह्यांची तक्रार नोंदवण्यासाठी अधिकृत सरकारी संकेतस्थळ कोणते आहे?",
+                    hi: "11. भारत में ऑनलाइन साइबर अपराध की शिकायत दर्ज करने के लिए आधिकारिक सरकारी पोर्टल कौन सा है?"
+                },
+                options: [
+                    { en: "cybercrime.gov.in", mr: "cybercrime.gov.in", hi: "cybercrime.gov.in" },
+                    { en: "onlinepólice.com", mr: "onlinepolice.com", hi: "onlinepolice.com" },
+                    { en: "reportcrime.in", mr: "reportcrime.in", hi: "reportcrime.in" },
+                    { en: "indiafightscrime.org", mr: "indiafightscrime.org", hi: "indiafightscrime.org" }
+                ],
+                correct: 0,
+                exp: {
+                    en: "National Cyber Crime Reporting Portal is cybercrime.gov.in.",
+                    mr: "cybercrime.gov.in हे भारत सरकारचे अधिकृत पोर्टल आहे.",
+                    hi: "cybercrime.gov.in भारत सरकार का आधिकारिक पोर्टल है।"
+                }
+            },
+            {
+                q: {
+                    en: "12. What is 'Juice Jacking'?",
+                    mr: "१२. 'ज्यूस जॅकिंग' (Juice Jacking) म्हणजे काय?",
+                    hi: "12. 'जूस जैकिंग' (Juice Jacking) क्या है?"
+                },
+                options: [
+                    { en: "Stealing fruit juice online", mr: "ऑनलाईन ज्यूस ऑर्डर चोरी करणे", hi: "ऑनलाइन जूस ऑर्डर की चोरी" },
+                    { en: "A cyberattack through infected public USB charging stations to steal data", mr: "सार्वजनिक ठिकाणी असणाऱ्या फसव्या युएसबी (USB) चार्जिंग पॉईंटद्वारे डेटा चोरी करणे", hi: "सार्वजनिक यूएसबी (USB) चार्जिंग पॉइंट से फोन का डेटा चुराना" },
+                    { en: "A battery draining app virus", mr: "बॅटरी खराब करणारा व्हायरस", hi: "बैटरी खत्म करने वाला वायरस" },
+                    { en: "Buying paid apps for free", mr: "पेड ॲप्स मोफत डाऊनलोड करणे", hi: "पेड ऐप मुफ्त में डाउनलोड करना" }
+                ],
+                correct: 1,
+                exp: {
+                    en: "Juice jacking exploits public USB charging ports to install malware or steal data from connected mobile phones.",
+                    mr: "सार्वजनिक यूएसबी पोर्टद्वारे मोबाईल चार्ज करताना मोबाईलमधील डेटा हॅक करणे म्हणजे ज्यूस जॅकिंग.",
+                    hi: "सार्वजनिक यूएसबी चार्जिंग पोर्ट के माध्यम से फोन से डेटा चोरी करने को जूस जैकिंग कहते हैं।"
+                }
+            }
+        ];
+
+        // RENDER CYBER SCAMS
+        function renderScams() {
+            const container = document.getElementById('scams-grid');
+            container.innerHTML = scamsData.map(scam => `
+                <div class="glass-card rounded-2xl p-6 border border-slate-700/60 hover:border-cyan-500/50 transition duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 ${scam.color} text-xl group-hover:scale-110 transition duration-300">
+                                <i class="fa-solid ${scam.icon}"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition">${scam.title[currentLang]}</h3>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">${scam.desc[currentLang]}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-800 text-xs">
+                        <span class="font-semibold text-rose-400 flex items-center gap-1 mb-1">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Red Flags:
+                        </span>
+                        <p class="text-slate-400">${scam.redFlags[currentLang]}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // RENDER VIRUSES
+        function renderViruses() {
+            const container = document.getElementById('viruses-grid');
+            container.innerHTML = virusesData.map(v => `
+                <div class="glass-card rounded-2xl p-6 border border-slate-700/60 hover:border-purple-500/50 transition duration-300">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 ${v.color} text-xl">
+                            <i class="fa-solid ${v.icon}"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">${v.title[currentLang]}</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">${v.desc[currentLang]}</p>
+                </div>
+            `).join('');
+        }
+
+        // RENDER RANSOMWARE
+        function renderRansomware() {
+            const container = document.getElementById('ransomware-details');
+            container.innerHTML = `
+                <div class="glass-card p-6 rounded-2xl border border-rose-500/30 mb-6">
+                    <h3 class="text-lg font-bold text-rose-300 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project"></i> Lifecycle
+                    </h3>
+                    <p class="text-slate-300 text-sm">${ransomwareData.overview[currentLang]}</p>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-4">Notable Ransomware Families</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${ransomwareData.notable.map(item => `
+                        <div class="glass-card p-5 rounded-xl border border-slate-700">
+                            <h4 class="text-lg font-bold text-amber-400 mb-2">${item.name}</h4>
+                            <p class="text-slate-300 text-xs leading-relaxed">${item.desc[currentLang]}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // RENDER PHISHING
+        function renderPhishing() {
+            const container = document.getElementById('phishing-grid');
+            container.innerHTML = `
+                <div class="space-y-4">
+                    ${phishingData.map(p => `
+                        <div class="glass-card p-5 rounded-2xl border border-slate-700">
+                            <h3 class="text-base font-bold text-amber-300 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-exclamation text-amber-400"></i> ${p.title[currentLang]}
+                            </h3>
+                            <p class="text-slate-300 text-sm">${p.desc[currentLang]}</p>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Email Comparison Box -->
+                <div class="glass-card p-6 rounded-2xl border border-slate-700 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-envelope-circle-check text-cyan-400"></i> Real vs. Fake Email Red Flags
+                        </h3>
+                        
+                        <div class="space-y-4 text-xs">
+                            <div class="p-4 bg-rose-950/40 border border-rose-800/60 rounded-xl space-y-2">
+                                <div class="flex items-center justify-between text-rose-400 font-bold border-b border-rose-900/60 pb-1">
+                                    <span>SUSPICIOUS EMAIL</span>
+                                    <span><i class="fa-solid fa-xmark"></i> FAKE</span>
+                                </div>
+                                <p><strong class="text-slate-300">From:</strong> service@bank-update-sec.com</p>
+                                <p><strong class="text-slate-300">Subject:</strong> URGENT: Account Suspended in 24 Hours!</p>
+                                <p class="text-slate-400 italic">"Dear Customer, click here immediately to enter your debit card PIN and avoid permanent blocking."</p>
+                            </div>
+
+                            <div class="p-4 bg-emerald-950/40 border border-emerald-800/60 rounded-xl space-y-2">
+                                <div class="flex items-center justify-between text-emerald-400 font-bold border-b border-emerald-900/60 pb-1">
+                                    <span>LEGITIMATE EMAIL</span>
+                                    <span><i class="fa-solid fa-check"></i> REAL</span>
+                                </div>
+                                <p><strong class="text-slate-300">From:</strong> no-reply@yourbank.com</p>
+                                <p><strong class="text-slate-300">Subject:</strong> Monthly Account Statement</p>
+                                <p class="text-slate-400 italic">"Dear Customer, your official statement is ready. Bank staff will NEVER ask for PIN or Password."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // RENDER BEST PRACTICES
+        function renderBestPractices() {
+            const container = document.getElementById('bp-grid');
+            container.innerHTML = bestPracticesData.map(bp => `
+                <div class="glass-card p-6 rounded-2xl border border-slate-700/60 flex space-x-4">
+                    <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 ${bp.color} text-2xl h-fit">
+                        <i class="fa-solid ${bp.icon}"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">${bp.title[currentLang]}</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">${bp.desc[currentLang]}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // RENDER QUIZ QUESTION
+        function renderQuizQuestion() {
+            const qData = quizQuestions[currentQuizIdx];
+            document.getElementById('quiz-progress-text').innerText = `Question ${currentQuizIdx + 1} of 12`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIdx + 1) / 12) * 100}%`;
+            document.getElementById('quiz-question-text').innerText = qData.q[currentLang];
+
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = qData.options.map((opt, idx) => {
+                const isSelected = userAnswers[currentQuizIdx] === idx;
+                const btnStyle = isSelected 
+                    ? 'border-amber-400 bg-amber-500/20 text-amber-300 font-bold' 
+                    : 'border-slate-700 bg-slate-900/60 text-slate-300 hover:border-slate-500';
+
+                return `
+                    <button onclick="selectQuizOption(${idx})" class="w-full text-left p-4 rounded-xl border ${btnStyle} transition duration-200 flex items-center justify-between">
+                        <span>${opt[currentLang]}</span>
+                        ${isSelected ? '<i class="fa-solid fa-circle-check text-amber-400"></i>' : '<i class="fa-regular fa-circle text-slate-600"></i>'}
+                    </button>
+                `;
+            }).join('');
+
+            // Prev button state
+            document.getElementById('quiz-prev-btn').disabled = currentQuizIdx === 0;
+            
+            // Next vs Finish Button Label
+            const nextBtn = document.getElementById('quiz-next-btn');
+            if (currentQuizIdx === 11) {
+                nextBtn.innerHTML = `<span>Submit Quiz</span> <i class="fa-solid fa-check mr-1"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span data-i18n="btn_next">${translations[currentLang].btn_next}</span> <i class="fa-solid fa-arrow-right ml-2"></i>`;
+            }
+        }
+
+        function selectQuizOption(optIdx) {
+            userAnswers[currentQuizIdx] = optIdx;
+            renderQuizQuestion();
+            updateScoreBadge();
+        }
+
+        function updateScoreBadge() {
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const badge = document.getElementById('quiz-score-badge');
+            badge.classList.remove('hidden');
+            document.getElementById('quiz-score-val').innerText = `${answeredCount}`;
+        }
+
+        function navigateQuiz(dir) {
+            if (dir === 1 && currentQuizIdx === 11) {
+                finishQuiz();
+                return;
+            }
+            currentQuizIdx = Math.max(0, Math.min(11, currentQuizIdx + dir));
+            renderQuizQuestion();
+        }
+
+        function finishQuiz() {
+            let score = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) score++;
+            });
+
+            document.getElementById('quiz-active-container').classList.add('hidden');
+            document.getElementById('quiz-results-container').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+
+            let msg = "";
+            if (score >= 10) msg = "Excellent! You possess advanced awareness against cybersecurity threats.";
+            else if (score >= 6) msg = "Good job! You have basic cybersecurity awareness, but review the explanations to stay fully safe.";
+            else msg = "You are vulnerable to cyber threats. Please review the tabs and detailed answers carefully!";
+            
+            document.getElementById('quiz-feedback-msg').innerText = msg;
+        }
+
+        function restartQuiz() {
+            currentQuizIdx = 0;
+            userAnswers = new Array(12).fill(null);
+            document.getElementById('quiz-results-container').classList.add('hidden');
+            document.getElementById('quiz-active-container').classList.remove('hidden');
+            document.getElementById('quiz-review-box').classList.add('hidden');
+            renderQuizQuestion();
+            updateScoreBadge();
+        }
+
+        function toggleAnswerReview() {
+            const reviewBox = document.getElementById('quiz-review-box');
+            if (!reviewBox.classList.contains('hidden')) {
+                reviewBox.classList.add('hidden');
+                return;
+            }
+
+            const reviewList = document.getElementById('review-list');
+            reviewList.innerHTML = quizQuestions.map((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+                
+                return `
+                    <div class="p-5 rounded-xl glass-card border ${isCorrect ? 'border-emerald-500/50 bg-emerald-950/20' : 'border-rose-500/50 bg-rose-950/20'} space-y-3">
+                        <p class="font-bold text-white text-sm">${q.q[currentLang]}</p>
+                        
+                        <div class="text-xs space-y-1">
+                            <p class="${isCorrect ? 'text-emerald-400' : 'text-rose-400'} font-semibold">
+                                Your Answer: ${userAns !== null ? q.options[userAns][currentLang] : 'Not Answered'} 
+                                ${isCorrect ? '<i class="fa-solid fa-check ml-1"></i>' : '<i class="fa-solid fa-xmark ml-1"></i>'}
+                            </p>
+                            ${!isCorrect ? `<p class="text-emerald-400 font-semibold">Correct Answer: ${q.options[q.correct][currentLang]}</p>` : ''}
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800 text-xs text-slate-300">
+                            <span class="font-bold text-cyan-400">Explanation:</span> ${q.exp[currentLang]}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            reviewBox.classList.remove('hidden');
+        }
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        // LANGUAGE CHANGE HANDLER
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // Update UI Static Text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            // Re-render Dynamic Content
+            renderScams();
+            renderViruses();
+            renderRansomware();
+            renderPhishing();
+            renderBestPractices();
+            renderQuizQuestion();
+        }
+
+        // INITIALIZATION ON LOAD
+        window.onload = function() {
+            changeLanguage('en');
+        };
+    </script>
+</body>
+</html>
